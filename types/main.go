@@ -21,6 +21,16 @@ type Car struct {
 	Make          string
 	Model         string
 	Year          int
+	MaxSpeed      int
+}
+
+// ! liking a function to type
+func (a *Car) Speed() {
+	fmt.Printf("A %s goes with %d \n", a.Make, a.MaxSpeed)
+}
+
+func (a *Car) Whatyear() {
+	fmt.Printf("The %s is from %d \n", a.Make, a.Year)
 }
 
 // reference types (pointers, slices, maps, functions, channels)
@@ -28,7 +38,7 @@ type Car struct {
 // interface type
 
 func main() {
-	// basic types (numbers, strings, booleans)
+	// ! basic types (numbers, strings, booleans)
 	myInt = 10
 	myUint = 20
 
@@ -48,9 +58,9 @@ func main() {
 
 	log.Println(myBool)
 
-	// End of basic types --------
+	// ! End of basic types --------
 
-	// aggregate types (array, struct)
+	// ! aggregate types (array, struct)
 
 	var myStrings [3]string
 
@@ -71,19 +81,19 @@ func main() {
 
 	fmt.Printf("My car is a %d %s %s \n", myCar.Year, myCar.Make, myCar.Model)
 
-	// End of aggregate types --------
+	// ! End of aggregate types --------
 
-	// reference types (pointers, slices, maps, functions, channels)
+	// * reference types (pointers, slices, maps, functions, channels)
 
-	// ---
+	// ! ---
 	x := 10
 
-	myFirstPointer := &x // pointer to address in memory
+	myFirstPointer := &x // ? pointer to address in memory
 
 	fmt.Println("x is", x)
 	fmt.Println("myFirstPointer is", myFirstPointer)
 
-	*myFirstPointer = 15 // add new value to the address in memory
+	*myFirstPointer = 15 // ? add new value to the address in memory
 
 	fmt.Println("x is now", x)
 
@@ -91,9 +101,9 @@ func main() {
 
 	fmt.Println("After function call, x is now", x)
 
-	// ---
+	// ! ---
 
-	var animals []string // slice
+	var animals []string // ? slice
 
 	animals = append(animals, "dog")
 	animals = append(animals, "fish")
@@ -111,7 +121,7 @@ func main() {
 	fmt.Println("First two elements are", animals[0:2])        // print first 2 elements
 	fmt.Println("The slice is", len(animals), "elements long") // length
 
-	//sort slice
+	// ? sort slice
 	fmt.Println("Is it sorted?", sort.StringsAreSorted(animals))
 
 	sort.Strings(animals)
@@ -122,7 +132,7 @@ func main() {
 	animals = deleteFromSlice(animals, 1, 2)
 	fmt.Println(animals)
 
-	// maps ----------
+	// * maps ----------
 
 	intMap := make(map[string]int) // ! Record<string,int> not sorted
 
@@ -138,7 +148,7 @@ func main() {
 
 	delete(intMap, "four")
 
-	// # check if element is in map
+	// ? check if element is in map
 	el, ok := intMap["four"]
 
 	if ok {
@@ -153,6 +163,39 @@ func main() {
 		fmt.Println(key, value)
 	}
 
+	myTotal := sumMany(2, 3, 4, 5)
+
+	fmt.Println("my total is", myTotal)
+
+	// ! functions
+
+	myNewCar := Car{
+		NumberOfTires: 4,
+		Luxury:        true,
+		BucketSeats:   true,
+		Make:          "BMW",
+		Model:         "435",
+		Year:          2022,
+		MaxSpeed:      250,
+	}
+
+	myNewCar.Speed()
+	myNewCar.Whatyear()
+
+	fmt.Println(" --------- ")
+
+	myOldCar := Car{
+		NumberOfTires: 4,
+		Luxury:        false,
+		BucketSeats:   false,
+		Make:          "Dacia",
+		Model:         "Logan",
+		Year:          2005,
+		MaxSpeed:      160,
+	}
+	myOldCar.Speed()
+	myOldCar.Whatyear()
+
 }
 
 func changeValueOfPointer(num *int) {
@@ -161,4 +204,17 @@ func changeValueOfPointer(num *int) {
 
 func deleteFromSlice(s []string, i, j int) []string {
 	return append(s[:i], s[j:]...)
+}
+
+// ! functions
+
+// * Variadic functions can be called with any number of trailing arguments
+func sumMany(nums ...int) int {
+	total := 0
+
+	for _, x := range nums {
+		total = total + x
+	}
+
+	return total
 }
