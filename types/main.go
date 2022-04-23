@@ -119,8 +119,39 @@ func main() {
 
 	fmt.Println("Is it sorted?", sort.StringsAreSorted(animals))
 
-	animals = deleteFromSlice[[]string](animals, 1, 2)
+	animals = deleteFromSlice(animals, 1, 2)
 	fmt.Println(animals)
+
+	// maps ----------
+
+	intMap := make(map[string]int) // ! Record<string,int> not sorted
+
+	intMap["one"] = 1
+	intMap["two"] = 2
+	intMap["three"] = 3
+	intMap["four"] = 4
+	intMap["five"] = 5
+
+	for key, value := range intMap {
+		fmt.Println(key, value)
+	}
+
+	delete(intMap, "four")
+
+	// # check if element is in map
+	el, ok := intMap["four"]
+
+	if ok {
+		fmt.Println(el, "is in map")
+	} else {
+		fmt.Println("Element is not in map")
+	}
+
+	intMap["two"] = 10
+
+	for key, value := range intMap {
+		fmt.Println(key, value)
+	}
 
 }
 
@@ -128,6 +159,6 @@ func changeValueOfPointer(num *int) {
 	*num = 25
 }
 
-func deleteFromSlice[T any](s []string, i, j int) []string {
+func deleteFromSlice(s []string, i, j int) []string {
 	return append(s[:i], s[j:]...)
 }
