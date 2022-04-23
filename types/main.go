@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"log"
 	"sort"
+	"unicode"
+
+	"github.com/eiannone/keyboard"
 )
 
 // basic types (numbers, strings, booleans)
@@ -33,9 +36,9 @@ func (a *Car) Whatyear() {
 	fmt.Printf("The %s is from %d \n", a.Make, a.Year)
 }
 
-// reference types (pointers, slices, maps, functions, channels)
+// ! channels
 
-// interface type
+var keyPressChan chan rune
 
 func main() {
 	// ! basic types (numbers, strings, booleans)
@@ -196,7 +199,30 @@ func main() {
 	myOldCar.Speed()
 	myOldCar.Whatyear()
 
+	// ! channels
+
+	keyPressChan = make(chan rune)
+
+	go listenForKeyPress()
+
+	fmt.Println("Press any key, or q to quit")
+	_ = keyboard.Open()
+	defer func() {
+		keyboard.Close()
+	}()
+
+	for {
+		char, _, _ := keyboard.GetSingleKey()
+		if unicode.ToLower(char) == 'q' {
+			break
+		}
+
+		keyPressChan <- char
+	}
+
 }
+
+// ! functions
 
 func changeValueOfPointer(num *int) {
 	*num = 25
@@ -205,8 +231,6 @@ func changeValueOfPointer(num *int) {
 func deleteFromSlice(s []string, i, j int) []string {
 	return append(s[:i], s[j:]...)
 }
-
-// ! functions
 
 // * Variadic functions can be called with any number of trailing arguments
 func sumMany(nums ...int) int {
@@ -217,4 +241,15 @@ func sumMany(nums ...int) int {
 	}
 
 	return total
+}
+
+// ! Channels
+
+// listenForKeyPress is called using the "go" keyword, so it runs as a goroutine while the
+// calling function (main) continues to execute
+func listenForKeyPress() {
+	for {
+		key := <-keyPressChan
+		fmt.Println("You pressed", string(key))
+	}
 }
